@@ -1,0 +1,989 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Short lessons mapped to your board's syllabus, practice that shows you where you went wrong, and a vetted university-student tutor one tap away. Pilot cohort forming for Matric Grades 9-10.">
+<meta name="theme-color" content="#174d3a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%23ffffff'/%3E%3Cpath d='M12 21V9' stroke='%23174d3a' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M12 13C12 13 9 12 7.5 9.5C6 7 6.5 4 6.5 4C6.5 4 9.5 4.5 11 7C12.5 9.5 12 13 12 13Z' fill='%23a7bfa9'/%3E%3Cpath d='M12 16C12 16 14.5 15.2 16 13.2C17.5 11.2 17.2 8.8 17.2 8.8C17.2 8.8 14.7 9.2 13.2 11.2C11.7 13.2 12 16 12 16Z' fill='%23174d3a'/%3E%3C/svg%3E">
+
+<!-- Link previews (WhatsApp, Facebook, X). Add og:image once a 1200x630 card exists. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="RootEd - Matric learning, made personal">
+<meta property="og:description" content="Short lessons mapped to your board's syllabus, practice that shows you where you went wrong, and a vetted university-student tutor one tap away. Pilot cohort forming for Matric Grades 9-10.">
+<meta property="og:locale" content="en_PK">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RootEd - Matric learning, made personal">
+<meta name="twitter:description" content="Short lessons mapped to your board's syllabus, practice that shows you where you went wrong, and a vetted university-student tutor one tap away. Pilot cohort forming for Matric Grades 9-10.">
+
+<title>RootEd</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600;7..72,700&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+
+<style>
+/* ============================================================
+   RootEd — tokens
+   Committed light design (white ground, per brief).
+   Neutrals are biased green so they read as chosen, not default.
+   ============================================================ */
+:root{
+  color-scheme: light;
+
+  --paper:#ffffff;
+  --mist:#f3f7f4;
+  --mist-2:#e9f0ea;
+  --root:#174d3a;
+  --root-hover:#0f3a2a;
+  --forest:#0e3125;
+  --sage:#a7bfa9;
+  --sage-soft:#dce8dd;
+  --brass:#8f6216;           /* AA on white */
+  --brass-lit:#d9a441;       /* on forest only */
+  --ink:#152520;
+  --ink-2:#54685d;
+  --ink-3:#7d8f85;
+  --line:#e1e9e3;
+  --line-strong:#cddbd0;
+  --flag:#8a3f1c;            /* "common mistake" tone, not alarm red */
+  --flag-soft:#fbf1ec;
+
+  --f-display:"Literata",Georgia,"Times New Roman",serif;
+  --f-ui:"Figtree","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"DM Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+
+  --gut:20px;
+  --wrap:1140px;
+  --r-s:8px;
+  --r-m:14px;
+  --r-l:22px;
+
+  --ease:cubic-bezier(.22,.68,.32,1);
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--f-ui);
+  font-size:17px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+h1,h2,h3,h4{ font-family:var(--f-display); font-weight:600; line-height:1.1; margin:0; text-wrap:balance; letter-spacing:-.015em; }
+p{ margin:0; }
+a{ color:inherit; }
+button{ font:inherit; color:inherit; }
+:focus-visible{ outline:2.5px solid var(--root); outline-offset:3px; border-radius:4px; }
+
+/* ---------- layout scaffolding ---------- */
+.wrap{ width:100%; max-width:var(--wrap); margin-inline:auto; padding-inline:var(--gut); }
+.sec{ padding-block:clamp(64px,9vw,118px); position:relative; }
+.eyebrow{
+  font-family:var(--f-mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-3); display:flex; align-items:center; gap:10px; margin-bottom:22px;
+}
+.eyebrow::before{ content:""; width:22px; height:1px; background:var(--line-strong); flex:none; }
+.lede{ font-size:clamp(17px,1.9vw,19.5px); color:var(--ink-2); max-width:62ch; }
+
+/* ---------- growth spine (desktop gutter) ---------- */
+.spine{
+  position:fixed; left:max(14px,calc((100vw - var(--wrap))/2 - 30px));
+  top:18vh; bottom:12vh; width:2px; background:var(--line); z-index:5;
+  border-radius:2px; pointer-events:none; display:none;
+}
+.spine i{
+  position:absolute; inset:0; transform-origin:top; transform:scaleY(var(--p,0));
+  background:linear-gradient(180deg,var(--sage),var(--root)); border-radius:2px;
+  display:block;
+}
+.spine b{
+  position:absolute; left:50%; width:7px; height:7px; margin-left:-3.5px; border-radius:50%;
+  background:var(--paper); border:2px solid var(--line-strong); display:block;
+}
+@media (min-width:1280px){ .spine{ display:block; } }
+
+/* ---------- header ---------- */
+.hdr{
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:40;
+  background:rgba(255,255,255,.88); backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent; transition:border-color .3s var(--ease);
+}
+.hdr.stuck{ border-bottom-color:var(--line); }
+.hdr .wrap{ display:flex; align-items:center; gap:18px; height:66px; }
+.mark{ display:flex; align-items:center; gap:9px; text-decoration:none; margin-right:auto; }
+.mark .glyph{ width:26px; height:26px; flex:none; }
+.mark .name{ font-family:var(--f-display); font-weight:700; font-size:20px; letter-spacing:-.02em; }
+.mark .name em{ font-style:normal; color:var(--root); }
+.nav{ display:none; gap:30px; }
+.nav a{ text-decoration:none; font-size:15px; font-weight:500; color:var(--ink-2); transition:color .2s; }
+.nav a:hover{ color:var(--root); }
+@media (min-width:900px){ .nav{ display:flex; } }
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:9px;
+  padding:13px 22px; border-radius:100px; font-weight:600; font-size:15.5px;
+  text-decoration:none; border:1.5px solid transparent; cursor:pointer;
+  transition:transform .18s var(--ease), background .2s, border-color .2s, box-shadow .2s;
+  min-height:46px;
+}
+.btn-p{ background:var(--root); color:#fff; box-shadow:0 1px 2px rgba(15,49,37,.2); }
+.btn-p:hover{ background:var(--root-hover); transform:translateY(-1.5px); box-shadow:0 8px 20px -8px rgba(15,49,37,.5); }
+.btn-g{ border-color:var(--line-strong); color:var(--ink); background:var(--paper); }
+.btn-g:hover{ border-color:var(--root); color:var(--root); transform:translateY(-1.5px); }
+.btn-l{ background:var(--sage-soft); color:var(--forest); }
+.btn-l:hover{ background:#cfe0d1; transform:translateY(-1.5px); }
+.btn-sm{ padding:10px 17px; font-size:14.5px; min-height:40px; }
+
+/* ---------- hero ---------- */
+.hero{ padding-top:clamp(40px,5.5vw,72px); padding-bottom:clamp(50px,7vw,92px); }
+.hero-grid{ display:grid; gap:clamp(38px,5vw,64px); align-items:start; }
+@media (min-width:1000px){ .hero-grid{ grid-template-columns:1.04fr .96fr; gap:58px; align-items:center; } }
+
+.tag{
+  display:inline-flex; align-items:center; gap:9px; font-family:var(--f-mono);
+  font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--root);
+  background:var(--mist); border:1px solid var(--mist-2); padding:7px 14px; border-radius:100px;
+}
+.tag s{ width:6px; height:6px; border-radius:50%; background:var(--brass-lit); text-decoration:none; flex:none; }
+
+h1{ font-size:clamp(38px,6.1vw,63px); margin:22px 0 0; letter-spacing:-.03em; }
+h1 span{ color:var(--root); display:block; }
+.hero p.lede{ margin-top:20px; font-size:clamp(17px,2vw,19.5px); }
+.hero-cta{ display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
+.hero-note{ margin-top:18px; font-size:13.5px; color:var(--ink-3); display:flex; align-items:center; gap:8px; }
+
+/* ---------- the demo card (hero thesis) ---------- */
+.demo{
+  background:var(--paper); border:1px solid var(--line); border-radius:var(--r-l);
+  box-shadow:0 1px 2px rgba(21,37,32,.04), 0 24px 56px -30px rgba(21,37,32,.3);
+  overflow:hidden;
+}
+.demo-top{
+  display:flex; align-items:center; gap:10px; padding:14px 20px;
+  border-bottom:1px solid var(--line); background:var(--mist);
+}
+.demo-top .code{ font-family:var(--f-mono); font-size:11.5px; letter-spacing:.06em; color:var(--ink-2); }
+.demo-top .live{
+  margin-left:auto; font-family:var(--f-mono); font-size:10.5px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--root); display:flex; align-items:center; gap:6px;
+}
+.demo-top .live s{ width:6px; height:6px; border-radius:50%; background:var(--root); text-decoration:none; }
+.demo-body{ padding:clamp(20px,3vw,26px); }
+.q{ font-family:var(--f-display); font-size:clamp(19px,2.3vw,22px); line-height:1.38; letter-spacing:-.01em; }
+.q b{ font-weight:600; color:var(--root); }
+.opts{ display:grid; gap:9px; margin-top:20px; }
+.opt{
+  display:flex; align-items:center; gap:13px; width:100%; text-align:left;
+  padding:14px 16px; border:1.5px solid var(--line); border-radius:var(--r-m);
+  background:var(--paper); cursor:pointer; transition:all .18s var(--ease); min-height:52px;
+}
+.opt:hover:not(:disabled){ border-color:var(--sage); background:var(--mist); }
+.opt:disabled{ cursor:default; }
+.opt .k{
+  width:28px; height:28px; flex:none; border-radius:50%; display:grid; place-items:center;
+  font-family:var(--f-mono); font-size:12.5px; background:var(--mist-2); color:var(--ink-2);
+  transition:all .18s var(--ease);
+}
+.opt .v{ font-weight:500; font-variant-numeric:tabular-nums; }
+.opt .r{ margin-left:auto; font-size:12.5px; font-weight:600; opacity:0; transition:opacity .25s; }
+.opt.is-wrong{ border-color:#e4c3b2; background:var(--flag-soft); }
+.opt.is-wrong .k{ background:#e9cdbe; color:var(--flag); }
+.opt.is-wrong .r{ opacity:1; color:var(--flag); }
+.opt.is-right{ border-color:var(--sage); background:var(--mist); }
+.opt.is-right .k{ background:var(--root); color:#fff; }
+.opt.is-right .r{ opacity:1; color:var(--root); }
+.opt.is-dim{ opacity:.42; }
+
+.verdict{ margin-top:18px; border-top:1px solid var(--line); padding-top:18px; }
+.verdict h4{ font-size:16.5px; margin-bottom:7px; }
+.verdict p{ font-size:14.8px; color:var(--ink-2); line-height:1.6; }
+.verdict .math{
+  font-family:var(--f-mono); font-size:13.5px; background:var(--mist); border-radius:var(--r-s);
+  padding:11px 14px; margin-top:12px; color:var(--ink); overflow-x:auto; white-space:nowrap;
+}
+
+.handoff-card{
+  margin-top:18px; background:var(--forest); border-radius:var(--r-m); padding:18px;
+  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+}
+.handoff-card .av{
+  width:44px; height:44px; flex:none; border-radius:50%; display:grid; place-items:center;
+  background:var(--sage); color:var(--forest); font-weight:700; font-size:15px; font-family:var(--f-ui);
+}
+.handoff-card .txt{ flex:1 1 170px; min-width:0; }
+.handoff-card .txt strong{ color:#fff; font-size:15px; display:block; font-weight:600; }
+.handoff-card .txt span{ color:var(--sage); font-size:13px; display:block; margin-top:2px; }
+.handoff-card .btn{ flex:none; }
+
+.reset{
+  margin-top:14px; background:none; border:none; padding:0; cursor:pointer;
+  font-family:var(--f-mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--ink-3); text-decoration:underline; text-underline-offset:3px;
+}
+.reset:hover{ color:var(--root); }
+
+/* ---------- honest status band ---------- */
+.band{ border-block:1px solid var(--line); background:var(--mist); }
+.band .wrap{ display:grid; gap:20px; padding-block:26px; }
+@media (min-width:760px){ .band .wrap{ grid-template-columns:repeat(3,1fr); gap:34px; } }
+.band dt{ font-family:var(--f-mono); font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); }
+.band dd{ margin:5px 0 0; font-size:15.5px; font-weight:500; color:var(--ink); }
+
+/* ---------- section head ---------- */
+.head{ max-width:66ch; margin-bottom:clamp(38px,5vw,56px); }
+.head h2{ font-size:clamp(29px,4.1vw,44px); letter-spacing:-.025em; }
+.head p{ margin-top:16px; }
+
+/* ---------- the loop (real sequence, so numbered) ---------- */
+.loop{ display:grid; gap:2px; background:var(--line); border:1px solid var(--line); border-radius:var(--r-l); overflow:hidden; }
+@media (min-width:820px){ .loop{ grid-template-columns:repeat(4,1fr); } }
+.step{ background:var(--paper); padding:clamp(22px,2.6vw,30px); transition:background .25s var(--ease); }
+.step:hover{ background:var(--mist); }
+.step .n{ font-family:var(--f-mono); font-size:12px; color:var(--brass); letter-spacing:.08em; }
+.step h3{ font-size:20px; margin:14px 0 9px; }
+.step p{ font-size:14.8px; color:var(--ink-2); line-height:1.58; }
+.step svg{ margin-top:18px; display:block; }
+
+/* ---------- forest anchor panel ---------- */
+.anchor{ background:var(--forest); color:#fff; }
+.anchor .eyebrow{ color:var(--sage); }
+.anchor .eyebrow::before{ background:rgba(167,191,169,.4); }
+.anchor h2{ font-size:clamp(29px,4.1vw,44px); letter-spacing:-.025em; }
+.anchor .lede{ color:var(--sage); }
+.anchor-grid{ display:grid; gap:clamp(34px,4.5vw,60px); }
+@media (min-width:980px){ .anchor-grid{ grid-template-columns:1fr 1fr; align-items:center; } }
+.contrast{ display:grid; gap:14px; }
+.crow{
+  display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start;
+  padding:17px 19px; border-radius:var(--r-m); border:1px solid rgba(167,191,169,.22);
+}
+.crow.no{ background:rgba(255,255,255,.03); }
+.crow.yes{ background:rgba(167,191,169,.11); border-color:rgba(167,191,169,.42); }
+.crow .ic{ width:22px; height:22px; flex:none; margin-top:2px; }
+.crow strong{ display:block; font-weight:600; font-size:15.5px; color:#fff; }
+.crow span{ display:block; font-size:14.2px; color:var(--sage); margin-top:3px; line-height:1.55; }
+.crow.no strong{ color:rgba(255,255,255,.66); }
+
+/* ---------- tutors ---------- */
+.tutors{ display:grid; gap:18px; }
+@media (min-width:700px){ .tutors{ grid-template-columns:repeat(2,1fr); } }
+@media (min-width:1020px){ .tutors{ grid-template-columns:repeat(3,1fr); } }
+.tutor{
+  border:1px solid var(--line); border-radius:var(--r-l); padding:24px; background:var(--paper);
+  display:flex; flex-direction:column; transition:border-color .22s var(--ease), transform .22s var(--ease), box-shadow .22s var(--ease);
+}
+.tutor:hover{ border-color:var(--sage); transform:translateY(-3px); box-shadow:0 18px 36px -26px rgba(21,37,32,.42); }
+.tutor .who{ display:flex; align-items:center; gap:14px; }
+.tutor .av{
+  width:52px; height:52px; flex:none; border-radius:50%; display:grid; place-items:center;
+  font-weight:700; font-size:17px; letter-spacing:-.01em;
+}
+.tutor h3{ font-size:18.5px; }
+.tutor .uni{ font-size:13.5px; color:var(--ink-2); margin-top:2px; }
+.tutor .meta{ display:flex; flex-wrap:wrap; gap:7px; margin-top:18px; }
+.chip{
+  font-family:var(--f-mono); font-size:11.5px; letter-spacing:.03em; padding:5px 10px;
+  border-radius:100px; background:var(--mist); color:var(--ink-2); border:1px solid var(--mist-2);
+}
+.tutor .say{ font-size:14.6px; color:var(--ink-2); margin-top:16px; line-height:1.6; flex:1; }
+.tutor .foot{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  margin-top:20px; padding-top:17px; border-top:1px solid var(--line);
+}
+.tutor .rate{ font-size:15px; font-weight:600; font-variant-numeric:tabular-nums; }
+.tutor .rate em{ font-style:normal; font-weight:400; font-size:12.5px; color:var(--ink-3); }
+.demo-link{
+  display:inline-flex; align-items:center; gap:7px; font-size:13.8px; font-weight:600; color:var(--root);
+  background:none; border:none; padding:6px 0; cursor:pointer; text-decoration:none;
+}
+.demo-link:hover{ text-decoration:underline; text-underline-offset:3px; }
+.placeholder-note{
+  margin-top:22px; display:flex; gap:11px; align-items:flex-start;
+  font-size:13.8px; color:var(--ink-2); background:var(--mist); border:1px dashed var(--line-strong);
+  border-radius:var(--r-m); padding:15px 18px;
+}
+.placeholder-note svg{ flex:none; margin-top:2px; }
+
+/* ---------- parents ---------- */
+.split{ display:grid; gap:clamp(34px,4.5vw,60px); }
+@media (min-width:980px){ .split{ grid-template-columns:.92fr 1.08fr; align-items:start; } }
+.checks{ display:grid; gap:2px; background:var(--line); border:1px solid var(--line); border-radius:var(--r-l); overflow:hidden; }
+.check{ background:var(--paper); padding:20px 22px; display:grid; grid-template-columns:auto 1fr; gap:15px; align-items:start; }
+.check .ic{ width:21px; height:21px; margin-top:3px; flex:none; }
+.check strong{ display:block; font-size:15.8px; font-weight:600; }
+.check span{ display:block; font-size:14.4px; color:var(--ink-2); margin-top:3px; line-height:1.56; }
+
+/* ---------- tutor recruit strip ---------- */
+.recruit{
+  border:1px solid var(--line); border-radius:var(--r-l); background:var(--mist);
+  padding:clamp(28px,4vw,48px); display:grid; gap:24px;
+}
+@media (min-width:900px){ .recruit{ grid-template-columns:1.25fr .75fr; align-items:center; } }
+.recruit h2{ font-size:clamp(25px,3.2vw,35px); letter-spacing:-.022em; }
+.recruit p{ margin-top:14px; color:var(--ink-2); font-size:16.5px; max-width:52ch; }
+.recruit .acts{ display:flex; flex-wrap:wrap; gap:11px; }
+@media (min-width:900px){ .recruit .acts{ justify-content:flex-end; } }
+
+/* ---------- faq ---------- */
+.faq{ border-top:1px solid var(--line); }
+details{ border-bottom:1px solid var(--line); }
+summary{
+  cursor:pointer; list-style:none; padding:22px 44px 22px 0; position:relative;
+  font-family:var(--f-display); font-size:clamp(17px,2vw,19.5px); font-weight:600; letter-spacing:-.012em;
+}
+summary::-webkit-details-marker{ display:none; }
+summary::after{
+  content:""; position:absolute; right:8px; top:50%; width:11px; height:11px; margin-top:-7px;
+  border-right:2px solid var(--ink-3); border-bottom:2px solid var(--ink-3);
+  transform:rotate(45deg); transition:transform .25s var(--ease);
+}
+details[open] summary::after{ transform:rotate(-135deg); margin-top:-2px; }
+summary:hover{ color:var(--root); }
+details .a{ padding:0 0 24px; font-size:15.6px; color:var(--ink-2); max-width:72ch; line-height:1.65; }
+details .a strong{ color:var(--ink); font-weight:600; }
+
+/* ---------- join form ---------- */
+.join{ background:var(--mist); border-top:1px solid var(--line); }
+.join-grid{ display:grid; gap:clamp(32px,4.5vw,56px); }
+@media (min-width:980px){ .join-grid{ grid-template-columns:.95fr 1.05fr; align-items:start; } }
+form{ display:grid; gap:14px; }
+.field{ display:grid; gap:7px; }
+.field label{ font-size:13.5px; font-weight:600; color:var(--ink); }
+.field input,.field select{
+  font:inherit; font-size:16px; padding:13px 15px; border:1.5px solid var(--line-strong);
+  border-radius:var(--r-m); background:var(--paper); color:var(--ink); width:100%; min-height:50px;
+  transition:border-color .18s;
+}
+.field input:focus,.field select:focus{ border-color:var(--root); outline:none; box-shadow:0 0 0 3px rgba(23,77,58,.12); }
+.field input::placeholder{ color:var(--ink-3); }
+.two{ display:grid; gap:14px; }
+@media (min-width:520px){ .two{ grid-template-columns:1fr 1fr; } }
+.fine{ font-size:12.8px; color:var(--ink-3); line-height:1.55; }
+.sent{
+  border:1px solid var(--sage); background:var(--paper); border-radius:var(--r-l);
+  padding:30px; text-align:left;
+}
+.sent h3{ font-size:22px; margin-bottom:10px; }
+.sent p{ color:var(--ink-2); font-size:15.4px; }
+
+/* ---------- founder ---------- */
+.founder{ display:grid; gap:20px; padding:clamp(24px,3vw,32px); border:1px solid var(--line); border-radius:var(--r-l); background:var(--paper); }
+.founder blockquote{ margin:0; font-family:var(--f-display); font-size:clamp(18px,2.2vw,21px); line-height:1.5; letter-spacing:-.014em; }
+.founder .by{ display:flex; align-items:center; gap:12px; }
+.founder .av{ width:42px; height:42px; border-radius:50%; background:var(--root); color:#fff; display:grid; place-items:center; font-weight:700; font-size:15px; flex:none; }
+.founder .by strong{ display:block; font-size:14.8px; }
+.founder .by span{ display:block; font-size:13.2px; color:var(--ink-3); }
+
+/* ---------- footer ---------- */
+footer{ background:var(--forest); color:var(--sage); padding-block:52px 34px; }
+footer a{ color:var(--sage); text-decoration:none; }
+footer a:hover{ color:#fff; text-decoration:underline; text-underline-offset:3px; }
+.f-top{ display:grid; gap:30px; padding-bottom:34px; border-bottom:1px solid rgba(167,191,169,.2); }
+@media (min-width:820px){ .f-top{ grid-template-columns:1.6fr 1fr 1fr; } }
+.f-top .name{ font-family:var(--f-display); font-weight:700; font-size:21px; color:#fff; }
+.f-top .tagline{ font-family:var(--f-display); font-style:italic; font-size:16px; color:var(--sage); margin-top:7px; }
+.f-col h4{ font-family:var(--f-mono); font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:rgba(167,191,169,.75); font-weight:400; margin-bottom:13px; }
+.f-col ul{ list-style:none; padding:0; margin:0; display:grid; gap:9px; font-size:14.6px; }
+.f-bot{ padding-top:26px; display:flex; flex-wrap:wrap; gap:14px; justify-content:space-between; font-size:13px; color:rgba(167,191,169,.72); }
+.f-bot .disc{ max-width:60ch; }
+
+/* ---------- motion ---------- */
+.rise{ opacity:1; transform:none; }
+@media (prefers-reduced-motion:no-preference){
+  .js .rise{ opacity:0; transform:translateY(16px); transition:opacity .62s var(--ease), transform .62s var(--ease); }
+  .js .rise.in{ opacity:1; transform:none; }
+  .hero .cascade{ animation:rise .7s var(--ease) both; }
+  .hero .cascade:nth-child(1){ animation-delay:.02s }
+  .hero .cascade:nth-child(2){ animation-delay:.08s }
+  .hero .cascade:nth-child(3){ animation-delay:.14s }
+  .hero .cascade:nth-child(4){ animation-delay:.2s }
+  .hero .cascade:nth-child(5){ animation-delay:.26s }
+  .demo{ animation:rise .8s var(--ease) .16s both; }
+}
+@keyframes rise{ from{ opacity:0; transform:translateY(18px); } to{ opacity:1; transform:none; } }
+@media (prefers-reduced-motion:reduce){ *{ animation-duration:.001ms !important; transition-duration:.001ms !important; } }
+
+/* ---------- standalone reset (the artifact host used to provide this) ---------- */
+img{ max-width:100%; height:auto; }
+[hidden]{ display:none !important; }
+</style>
+</head>
+<body>
+<!-- growth spine: root system + progress, one metaphor -->
+<div class="spine" aria-hidden="true"><i id="spineFill"></i><b style="top:0%"></b><b style="top:33%"></b><b style="top:66%"></b><b style="top:100%"></b></div>
+
+<header class="hdr" id="hdr">
+  <div class="wrap">
+    <a href="#top" class="mark" aria-label="RootEd home">
+      <svg class="glyph" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 21V9" stroke="#174d3a" stroke-width="2" stroke-linecap="round"/>
+        <path d="M12 13C12 13 9 12 7.5 9.5C6 7 6.5 4 6.5 4C6.5 4 9.5 4.5 11 7C12.5 9.5 12 13 12 13Z" fill="#a7bfa9"/>
+        <path d="M12 16C12 16 14.5 15.2 16 13.2C17.5 11.2 17.2 8.8 17.2 8.8C17.2 8.8 14.7 9.2 13.2 11.2C11.7 13.2 12 16 12 16Z" fill="#174d3a"/>
+      </svg>
+      <span class="name">Root<em>Ed</em></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#how">How it works</a>
+      <a href="#tutors">Tutors</a>
+      <a href="#parents">For parents</a>
+      <a href="#teach">Teach</a>
+    </nav>
+    <a href="#join" class="btn btn-p btn-sm">Join the pilot</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ══════════ HERO: the product, not a picture of it ══════════ -->
+  <section class="sec hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="tag cascade"><s></s> Pilot cohort forming · Grades 9–10</span>
+        <h1 class="cascade">Stuck on a chapter?<span>Get unstuck in minutes.</span></h1>
+        <p class="lede cascade">Short lessons mapped to your board's syllabus. Practice questions that tell you <em>where</em> you went wrong — not just that you did. And when you need a person, a university student who sat these same papers two years ago is one tap away.</p>
+        <div class="hero-cta cascade">
+          <a href="#join" class="btn btn-p">Join the pilot cohort</a>
+          <a href="#how" class="btn btn-g">See how it works</a>
+        </div>
+        <p class="hero-note cascade">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="#8f6216" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Try the question on the right. No signup.
+        </p>
+      </div>
+
+      <div class="demo" id="demo">
+        <div class="demo-top">
+          <span class="code">SSC-II · PHYSICS · CH 2 KINEMATICS</span>
+          <span class="live"><s></s> Live demo</span>
+        </div>
+        <div class="demo-body">
+          <p class="q">A car starts <b>from rest</b> and accelerates uniformly at 2 m/s² for 5 seconds. How far does it travel?</p>
+          <div class="opts" id="opts" role="group" aria-label="Answer choices">
+            <button class="opt" data-k="A" data-v="10 m" data-verdict="short"><span class="k">A</span><span class="v">10 m</span><span class="r"></span></button>
+            <button class="opt" data-k="B" data-v="25 m" data-verdict="right"><span class="k">B</span><span class="v">25 m</span><span class="r"></span></button>
+            <button class="opt" data-k="C" data-v="50 m" data-verdict="common"><span class="k">C</span><span class="v">50 m</span><span class="r"></span></button>
+          </div>
+          <div id="verdict" hidden></div>
+          <button class="reset" id="reset" hidden>Try again</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- honest status — no invented numbers -->
+  <section class="band">
+    <dl class="wrap">
+      <div><dt>Stage</dt><dd>Pre-launch. First cohort of 20–30 learners.</dd></div>
+      <div><dt>Scope at launch</dt><dd>One board, one subject — chosen from what students tell us.</dd></div>
+      <div><dt>Tutors</dt><dd>University students. Vetted, demo-reviewed, not anonymous.</dd></div>
+    </dl>
+  </section>
+
+  <!-- ══════════ THE LOOP — a real sequence, so it earns numbers ══════════ -->
+  <section class="sec" id="how">
+    <div class="wrap">
+      <div class="head rise">
+        <p class="eyebrow">The loop</p>
+        <h2>Four steps. The fourth is the one nobody else builds.</h2>
+        <p class="lede">A free video can explain a chapter. It cannot notice that you have misunderstood it. RootEd closes that gap on the same screen.</p>
+      </div>
+      <div class="loop rise">
+        <article class="step">
+          <span class="n">01</span>
+          <h3>Learn</h3>
+          <p>A 5–10 minute lesson on one chapter of your actual board syllabus. Full transcript, so it works on a slow connection.</p>
+          <svg width="48" height="30" viewBox="0 0 48 30" fill="none" aria-hidden="true"><rect x="1" y="1" width="46" height="28" rx="5" stroke="#cddbd0" stroke-width="1.5"/><path d="M19 10l11 5-11 5V10z" fill="#174d3a"/></svg>
+        </article>
+        <article class="step">
+          <span class="n">02</span>
+          <h3>Practise</h3>
+          <p>Three to five past-paper style questions. Every wrong answer is explained — the specific slip, not a generic hint.</p>
+          <svg width="48" height="30" viewBox="0 0 48 30" fill="none" aria-hidden="true"><rect x="1" y="1" width="46" height="28" rx="5" stroke="#cddbd0" stroke-width="1.5"/><path d="M9 11h14M9 16h20M9 21h9" stroke="#a7bfa9" stroke-width="2" stroke-linecap="round"/><path d="M34 13l3 3 6-6" stroke="#174d3a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </article>
+        <article class="step">
+          <span class="n">03</span>
+          <h3>Ask</h3>
+          <p>Still not clicking? Tap once. We show tutors who teach that exact chapter — with a 60-second demo so you hear them first.</p>
+          <svg width="48" height="30" viewBox="0 0 48 30" fill="none" aria-hidden="true"><rect x="1" y="1" width="46" height="28" rx="5" stroke="#cddbd0" stroke-width="1.5"/><circle cx="16" cy="15" r="5" fill="#a7bfa9"/><circle cx="31" cy="15" r="5" fill="#174d3a"/></svg>
+        </article>
+        <article class="step">
+          <span class="n">04</span>
+          <h3>Book</h3>
+          <p>Your parent approves the slot and the price before anything is paid. Session happens. You come back to the chapter and finish it.</p>
+          <svg width="48" height="30" viewBox="0 0 48 30" fill="none" aria-hidden="true"><rect x="1" y="1" width="46" height="28" rx="5" stroke="#cddbd0" stroke-width="1.5"/><path d="M12 8v4M36 8v4M6 15h36" stroke="#cddbd0" stroke-width="1.5" stroke-linecap="round"/><rect x="14" y="18" width="7" height="5" rx="1.5" fill="#174d3a"/></svg>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FOREST ANCHOR: the differentiator ══════════ -->
+  <section class="sec anchor">
+    <div class="wrap anchor-grid">
+      <div class="rise">
+        <p class="eyebrow">Why this is different</p>
+        <h2>The lesson knows when to hand you to a person.</h2>
+        <p class="lede" style="margin-top:18px">Pakistan already has free videos, and it already has tutor directories. They live on separate websites, and the student in between them is the one who gives up. We are building the join, not a fifth version of either half.</p>
+      </div>
+      <div class="contrast rise">
+        <div class="crow no">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,.3)" stroke-width="1.8"/><path d="M8.5 15.5l7-7M8.5 8.5l7 7" stroke="rgba(255,255,255,.45)" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <div><strong>A free video library</strong><span>Watch, still not understand, close the tab. Nothing notices.</span></div>
+        </div>
+        <div class="crow no">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,.3)" stroke-width="1.8"/><path d="M8.5 15.5l7-7M8.5 8.5l7 7" stroke="rgba(255,255,255,.45)" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <div><strong>A tutor listing</strong><span>Scroll a hundred strangers with no idea which chapter you actually need.</span></div>
+        </div>
+        <div class="crow yes">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#a7bfa9" stroke-width="1.8"/><path d="M7.5 12.2l3.2 3.2 6-6.4" stroke="#a7bfa9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><strong>RootEd</strong><span>You miss question 3 on Kinematics. The page offers you two tutors who teach Kinematics, this week, at a price shown up front. That is the whole idea.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ TUTORS ══════════ -->
+  <section class="sec" id="tutors">
+    <div class="wrap">
+      <div class="head rise">
+        <p class="eyebrow">Who teaches</p>
+        <h2>Not anonymous. Not a five-star average of nothing.</h2>
+        <p class="lede">Every tutor records a 60-second demo before they appear here, so you hear how someone explains before you pay them. We show what we have verified, and nothing we have not.</p>
+      </div>
+
+      <div class="tutors rise">
+        <article class="tutor">
+          <div class="who">
+            <div class="av" style="background:#dce8dd;color:#174d3a">AK</div>
+            <div><h3>Ayesha K.</h3><p class="uni">BS Physics, 3rd year</p></div>
+          </div>
+          <div class="meta">
+            <span class="chip">PHYSICS</span><span class="chip">SSC I–II</span><span class="chip">URDU / ENG</span>
+          </div>
+          <p class="say">"Most students don't fail Kinematics. They fail unit conversion inside Kinematics. I go there first."</p>
+          <div class="foot">
+            <span class="rate">PKR 900 <em>/ hour</em></span>
+            <button class="demo-link" type="button" data-demo="Ayesha K.">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M10 8.5l6 3.5-6 3.5v-7z" fill="currentColor"/></svg>
+              60-sec demo
+            </button>
+          </div>
+        </article>
+
+        <article class="tutor">
+          <div class="who">
+            <div class="av" style="background:#174d3a;color:#fff">BH</div>
+            <div><h3>Bilal H.</h3><p class="uni">BSc Mathematics, final year</p></div>
+          </div>
+          <div class="meta">
+            <span class="chip">MATHS</span><span class="chip">SSC II</span><span class="chip">URDU</span>
+          </div>
+          <p class="say">"Quadratics look frightening until you have factorised nine of them out loud with somebody. Then they stop."</p>
+          <div class="foot">
+            <span class="rate">PKR 800 <em>/ hour</em></span>
+            <button class="demo-link" type="button" data-demo="Bilal H.">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M10 8.5l6 3.5-6 3.5v-7z" fill="currentColor"/></svg>
+              60-sec demo
+            </button>
+          </div>
+        </article>
+
+        <article class="tutor">
+          <div class="who">
+            <div class="av" style="background:#f3f7f4;color:#174d3a;border:1.5px solid #cddbd0">SN</div>
+            <div><h3>Sana N.</h3><p class="uni">MBBS 2nd year</p></div>
+          </div>
+          <div class="meta">
+            <span class="chip">BIOLOGY</span><span class="chip">SSC I–II</span><span class="chip">URDU / ENG</span>
+          </div>
+          <p class="say">"I sat this same board paper three years ago. I remember exactly which diagrams the examiner wants labelled."</p>
+          <div class="foot">
+            <span class="rate">PKR 850 <em>/ hour</em></span>
+            <button class="demo-link" type="button" data-demo="Sana N.">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M10 8.5l6 3.5-6 3.5v-7z" fill="currentColor"/></svg>
+              60-sec demo
+            </button>
+          </div>
+        </article>
+      </div>
+
+      <p class="placeholder-note rise">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#8f6216" stroke-width="1.7"/><path d="M12 7.5v5.5M12 16.3v.2" stroke="#8f6216" stroke-width="2" stroke-linecap="round"/></svg>
+        <span><strong>These are example profiles, shown to illustrate the format.</strong> Real tutors are being vetted now — identity, qualification and a reviewed demo lesson — and the first confirmed three will replace these. We would rather show you a placeholder than a person who does not exist.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════ PARENTS ══════════ -->
+  <section class="sec" id="parents" style="background:var(--mist);border-block:1px solid var(--line)">
+    <div class="wrap split">
+      <div class="rise">
+        <p class="eyebrow">For parents</p>
+        <h2 style="font-size:clamp(29px,4.1vw,42px);letter-spacing:-.025em">You approve everything. Before it happens.</h2>
+        <p class="lede" style="margin-top:16px">Your child is a minor. We treat that as a design constraint, not a policy page.</p>
+        <div class="founder" style="margin-top:28px">
+          <blockquote>"I grew up in Chitral. The problem was never that students there weren't clever. It was that when you got stuck, there was nobody in the valley to ask."</blockquote>
+          <div class="by">
+            <div class="av">Z</div>
+            <div><strong>Zeeshan</strong><span>Founder, RootEd</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="checks rise">
+        <div class="check">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.8l7.5 3v6c0 4.6-3.1 8-7.5 9.4C7.6 19.8 4.5 16.4 4.5 11.8v-6l7.5-3z" stroke="#174d3a" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12l2.2 2.2L15.4 10" stroke="#174d3a" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><strong>No tutor contacts your child directly</strong><span>Messaging runs through approved, supervised channels. There is no public student directory and no open inbox.</span></div>
+        </div>
+        <div class="check">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5.5" width="18" height="14" rx="2.5" stroke="#174d3a" stroke-width="1.7"/><path d="M3 10h18" stroke="#174d3a" stroke-width="1.7"/><path d="M7 14.5h5" stroke="#174d3a" stroke-width="1.9" stroke-linecap="round"/></svg>
+          <div><strong>The full price is on screen before you pay</strong><span>Tutor's fee, RootEd's fee, session length, cancellation terms. One receipt per session. Nothing in small print.</span></div>
+        </div>
+        <div class="check">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V9.5M10 19V5M16 19v-6.5M22 19H2" stroke="#174d3a" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <div><strong>You see the same progress the student sees</strong><span>Which chapters are done, which quiz was failed twice, which session was booked and why. Real completions, not a motivational graph.</span></div>
+        </div>
+        <div class="check">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.2" stroke="#174d3a" stroke-width="1.7"/><path d="M12 7.6v5.2M12 16.1v.2" stroke="#174d3a" stroke-width="2" stroke-linecap="round"/></svg>
+          <div><strong>One named person handles concerns</strong><span>A "Report a concern" button that reaches a real human with a name, not a shared inbox. Missed session, uncomfortable moment, refund — same route.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ TUTOR RECRUIT ══════════ -->
+  <section class="sec" id="teach">
+    <div class="wrap">
+      <div class="recruit rise">
+        <div>
+          <p class="eyebrow">For university students</p>
+          <h2>Teach what you just finished learning.</h2>
+          <p>You sat these papers recently enough to remember what was confusing. Record one 60-second demo, set your rate and your free hours, and we bring you students who need your exact chapter. We handle finding them, the guardian approval and the payment. You teach.</p>
+        </div>
+        <div class="acts">
+          <a href="#join" class="btn btn-p">Apply to teach</a>
+          <a href="#faq" class="btn btn-g">What's required</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FAQ ══════════ -->
+  <section class="sec" id="faq" style="padding-top:0">
+    <div class="wrap">
+      <div class="head rise" style="margin-bottom:22px">
+        <p class="eyebrow">Straight answers</p>
+        <h2>Questions we would ask too.</h2>
+      </div>
+      <div class="faq rise">
+        <details>
+          <summary>Is RootEd live yet?</summary>
+          <div class="a">No. We are forming the first cohort of 20–30 learners and vetting the first tutors. Joining the list puts you in that group and costs nothing. We would rather say this plainly than put a fake launch date on a page.</div>
+        </details>
+        <details>
+          <summary>Which board and subject are you starting with?</summary>
+          <div class="a">We have deliberately not decided. We are picking the first board and subject from what students actually tell us they are stuck on — the form below asks. Starting with one and doing it properly beats covering nine badly.</div>
+        </details>
+        <details>
+          <summary>Are these certified teachers?</summary>
+          <div class="a"><strong>No, and that is the point.</strong> They are university students who sat these board papers recently. We verify identity and qualifications, review a demo lesson, and train them on lesson structure and safeguarding before they take a booking. What you get is someone closer to your experience, at a price a Matric family can actually pay. We will never describe them as certified schoolteachers, because they are not.</div>
+        </details>
+        <details>
+          <summary>What does it cost?</summary>
+          <div class="a">Sample lessons are free. Live sessions are set by each tutor — the examples above sit around PKR 800–900 an hour, and RootEd takes a disclosed percentage of that. Final pricing comes out of the pilot, and we will not publish a number we have not tested with real families.</div>
+        </details>
+        <details>
+          <summary>Will it work on a slow connection or a shared phone?</summary>
+          <div class="a">That is a requirement, not a nice-to-have. Every lesson has a full text transcript so it can be read without video, video quality is adjustable, and the whole thing is built for a 360-pixel screen first. Many of the students we are building for share one phone in the household.</div>
+        </details>
+        <details>
+          <summary>How do I know a session actually happened?</summary>
+          <div class="a">Every booking has a state you can see: requested, guardian-approved, paid, completed. A missed session by either side has a defined remedy written down before you book — not decided afterwards over WhatsApp.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ JOIN ══════════ -->
+  <section class="sec join" id="join">
+    <div class="wrap join-grid">
+      <div class="rise">
+        <p class="eyebrow">Join the pilot</p>
+        <h2 style="font-size:clamp(29px,4.1vw,42px);letter-spacing:-.025em">Tell us what you are stuck on.</h2>
+        <p class="lede" style="margin-top:16px">Two minutes. It decides which board and subject we build first, and puts you in the first cohort. Students, parents and prospective tutors all use this same form.</p>
+        <p class="fine" style="margin-top:22px">If you are under 18, please fill this in with a parent or guardian. We only use your number to talk to you about the pilot — no marketing lists, no sharing with anyone else.</p>
+      </div>
+
+      <div class="rise">
+        <form id="joinForm" novalidate>
+          <div class="field">
+            <label for="f-role">I am a…</label>
+            <select id="f-role" name="role">
+              <option>Student (Grade 9 or 10)</option>
+              <option>Parent or guardian</option>
+              <option>University student who wants to teach</option>
+              <option>School or organisation</option>
+            </select>
+          </div>
+          <div class="two">
+            <div class="field">
+              <label for="f-name">Name</label>
+              <input id="f-name" name="name" type="text" placeholder="Your name" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="f-phone">WhatsApp number</label>
+              <input id="f-phone" name="phone" type="tel" placeholder="03xx xxxxxxx" autocomplete="tel" required>
+            </div>
+          </div>
+          <div class="two">
+            <div class="field">
+              <label for="f-board">Board</label>
+              <select id="f-board" name="board">
+                <option>Federal Board (FBISE)</option>
+                <option>BISE Lahore</option>
+                <option>BISE Rawalpindi</option>
+                <option>BISE Peshawar</option>
+                <option>BISE Karachi</option>
+                <option>AJK Board</option>
+                <option>Other / not sure</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-subject">Hardest subject right now</label>
+              <select id="f-subject" name="subject">
+                <option>Physics</option>
+                <option>Mathematics</option>
+                <option>Chemistry</option>
+                <option>Biology</option>
+                <option>English</option>
+                <option>Computer Science</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-chapter">Which chapter or topic is giving trouble? <span style="font-weight:400;color:var(--ink-3)">(optional, but it helps a lot)</span></label>
+            <input id="f-chapter" name="chapter" type="text" placeholder="e.g. Kinematics, quadratic equations, cell division">
+          </div>
+          <button type="submit" class="btn btn-p" style="width:100%;margin-top:6px">Join the pilot cohort</button>
+          <p class="fine">We will message you on WhatsApp within a few days. No payment is taken at this stage.</p>
+        </form>
+
+        <div class="sent" id="sent" hidden>
+          <h3>You're on the list.</h3>
+          <p id="sentBody">We'll message you on WhatsApp within a few days, before the first cohort opens. Thank you — what you told us genuinely decides which subject gets built first.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="f-top">
+      <div>
+        <div class="name">RootEd</div>
+        <p class="tagline">Grow where you are planted.</p>
+      </div>
+      <div class="f-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#tutors">Tutors</a></li>
+          <li><a href="#parents">For parents</a></li>
+          <li><a href="#teach">Teach with us</a></li>
+        </ul>
+      </div>
+      <div class="f-col">
+        <h4>Pilot</h4>
+        <ul>
+          <li><a href="#join">Join the cohort</a></li>
+          <li><a href="#faq">Questions</a></li>
+          <li><a href="#join">Report a concern</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="f-bot">
+      <p class="disc">Pre-launch working site. No enrolments, sessions or payments are being taken yet. Tutor profiles shown are examples, clearly marked. Pakistan · Matric Grades 9–10.</p>
+      <p>© 2026 RootEd</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  document.documentElement.classList.add("js");
+
+  /* ---- scroll reveal (fails open: .rise is visible without JS) ---- */
+  var risers = document.querySelectorAll(".rise");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.06 });
+    risers.forEach(function(el){ io.observe(el); });
+  } else {
+    risers.forEach(function(el){ el.classList.add("in"); });
+  }
+
+  /* ---- growth spine + header state ---- */
+  var fill = document.getElementById("spineFill");
+  var hdr  = document.getElementById("hdr");
+  var tick = false;
+  function frame(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var p = max > 0 ? Math.min(1, Math.max(0, h.scrollTop / max)) : 0;
+    if (fill) fill.style.setProperty("--p", p.toFixed(4));
+    if (hdr) hdr.classList.toggle("stuck", h.scrollTop > 12);
+    tick = false;
+  }
+  window.addEventListener("scroll", function(){
+    if (!tick){ tick = true; requestAnimationFrame(frame); }
+  }, { passive:true });
+  frame();
+
+  /* ---- hero demo: the lesson → tutor handoff, performed ---- */
+  var opts    = document.getElementById("opts");
+  var verdict = document.getElementById("verdict");
+  var reset   = document.getElementById("reset");
+
+  var COPY = {
+    common: {
+      title: "That's the most common slip on this question.",
+      body: "You used the <em>final</em> velocity (v = at = 10 m/s) for the whole 5 seconds. But the car was slower than that for most of the trip — it started from rest. You need the <em>average</em> velocity, which is half of 10.",
+      math: "s = ½ a t²  →  ½ × 2 × 5²  =  25 m",
+      hand: true
+    },
+    short: {
+      title: "Close, but that's v = at, not distance.",
+      body: "10 is the speed the car reaches after 5 seconds, in m/s — not how far it went. Distance needs the time factored in a second time, which is where the t² comes from.",
+      math: "s = ½ a t²  →  ½ × 2 × 5²  =  25 m",
+      hand: true
+    },
+    right: {
+      title: "Correct — and you avoided the trap.",
+      body: "Most students answer 50 m here, because they use the final velocity instead of the average. You didn't. On the real platform this is where we'd move you to the next topic instead of making you sit through an explanation you don't need.",
+      math: "s = ½ a t²  →  ½ × 2 × 5²  =  25 m",
+      hand: false
+    }
+  };
+
+  function render(kind){
+    var c = COPY[kind];
+    var html =
+      '<div class="verdict">' +
+        '<h4>' + c.title + '</h4>' +
+        '<p>' + c.body + '</p>' +
+        '<div class="math">' + c.math + '</div>' +
+      '</div>';
+
+    if (c.hand){
+      html +=
+        '<div class="handoff-card">' +
+          '<div class="av">AK</div>' +
+          '<div class="txt">' +
+            '<strong>Ayesha teaches Kinematics</strong>' +
+            '<span>Free 20-min trial · Thu 7:00 pm · Urdu / English</span>' +
+          '</div>' +
+          '<a href="#join" class="btn btn-l btn-sm">Book a trial</a>' +
+        '</div>';
+    } else {
+      html +=
+        '<div class="handoff-card">' +
+          '<div class="av" style="background:#d9a441">✓</div>' +
+          '<div class="txt">' +
+            '<strong>Next: Chapter 3 — Dynamics</strong>' +
+            '<span>Your progress would be saved here</span>' +
+          '</div>' +
+          '<a href="#join" class="btn btn-l btn-sm">Join the pilot</a>' +
+        '</div>';
+    }
+
+    verdict.innerHTML = html;
+    verdict.hidden = false;
+    reset.hidden = false;
+  }
+
+  if (opts){
+    opts.addEventListener("click", function(ev){
+      var btn = ev.target.closest(".opt");
+      if (!btn || btn.disabled) return;
+      var kind = btn.dataset.verdict;
+      var isRight = kind === "right";
+
+      Array.prototype.forEach.call(opts.children, function(o){
+        o.disabled = true;
+        if (o === btn){
+          o.classList.add(isRight ? "is-right" : "is-wrong");
+          o.querySelector(".r").textContent = isRight ? "Correct" : "Not quite";
+        } else if (o.dataset.verdict === "right"){
+          o.classList.add("is-right");
+          o.querySelector(".r").textContent = "Answer";
+        } else {
+          o.classList.add("is-dim");
+        }
+      });
+
+      render(kind);
+    });
+  }
+
+  if (reset){
+    reset.addEventListener("click", function(){
+      Array.prototype.forEach.call(opts.children, function(o){
+        o.disabled = false;
+        o.className = "opt";
+        o.querySelector(".r").textContent = "";
+      });
+      verdict.hidden = true;
+      verdict.innerHTML = "";
+      reset.hidden = true;
+      opts.children[0].focus();
+    });
+  }
+
+  /* ---- tutor demo buttons: honest about being placeholders ---- */
+  document.querySelectorAll("[data-demo]").forEach(function(b){
+    b.addEventListener("click", function(){
+      var prev = b.innerHTML;
+      b.innerHTML = "Demo goes here once " + b.dataset.demo.split(" ")[0] + " is vetted";
+      b.style.color = "var(--ink-3)";
+      setTimeout(function(){ b.innerHTML = prev; b.style.color = ""; }, 2600);
+    });
+  });
+
+  /* ---- join form ---- */
+  var form = document.getElementById("joinForm");
+  var sent = document.getElementById("sent");
+  if (form){
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var name  = document.getElementById("f-name");
+      var phone = document.getElementById("f-phone");
+      if (!name.value.trim()){ name.focus(); return; }
+      if (!phone.value.trim()){ phone.focus(); return; }
+
+      var role = document.getElementById("f-role").value;
+      var subj = document.getElementById("f-subject").value;
+      var body = document.getElementById("sentBody");
+      if (role.indexOf("teach") > -1){
+        body.textContent = "We'll message you on WhatsApp within a few days about recording a demo lesson. Thank you — tutor supply is the harder half of this, and you're early.";
+      } else {
+        body.textContent = "We'll message you on WhatsApp within a few days, before the first cohort opens. You picked " + subj + " — that genuinely counts towards which subject gets built first.";
+      }
+
+      form.hidden = true;
+      sent.hidden = false;
+      sent.scrollIntoView({ behavior:"smooth", block:"center" });
+    });
+  }
+})();
+</script>
+</body>
+</html>
