@@ -150,7 +150,7 @@ button{ font:inherit; color:inherit; }
   font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--root);
   background:var(--mist); border:1px solid var(--mist-2); padding:7px 14px; border-radius:100px;
 }
-.tag s{ width:6px; height:6px; border-radius:50%; background:var(--brass-lit); text-decoration:none; flex:none; }
+.tag .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-lit); text-decoration:none; flex:none; }
 
 h1{ font-size:clamp(38px,6.1vw,63px); margin:22px 0 0; letter-spacing:-.03em; }
 h1 span{ color:var(--root); display:block; }
@@ -173,7 +173,7 @@ h1 span{ color:var(--root); display:block; }
   margin-left:auto; font-family:var(--f-mono); font-size:10.5px; letter-spacing:.12em;
   text-transform:uppercase; color:var(--root); display:flex; align-items:center; gap:6px;
 }
-.demo-top .live s{ width:6px; height:6px; border-radius:50%; background:var(--root); text-decoration:none; }
+.demo-top .live .dot{ width:6px; height:6px; border-radius:50%; background:var(--root); text-decoration:none; }
 .demo-body{ padding:clamp(20px,3vw,26px); }
 .q{ font-family:var(--f-display); font-size:clamp(19px,2.3vw,22px); line-height:1.38; letter-spacing:-.01em; }
 .q b{ font-weight:600; color:var(--root); }
@@ -444,7 +444,7 @@ img{ max-width:100%; height:auto; }
   <section class="sec hero">
     <div class="wrap hero-grid">
       <div>
-        <span class="tag cascade"><s></s> Pilot cohort forming · Grades 9–10</span>
+        <span class="tag cascade"><span class="dot"></span> Pilot cohort forming · Grades 9–10</span>
         <h1 class="cascade">Stuck on a chapter?<span>Get unstuck in minutes.</span></h1>
         <p class="lede cascade">Short lessons mapped to your board's syllabus. Practice questions that tell you <em>where</em> you went wrong — not just that you did. And when you need a person, a university student who sat these same papers two years ago is one tap away.</p>
         <div class="hero-cta cascade">
@@ -460,7 +460,7 @@ img{ max-width:100%; height:auto; }
       <div class="demo" id="demo">
         <div class="demo-top">
           <span class="code">SSC-II · PHYSICS · CH 2 KINEMATICS</span>
-          <span class="live"><s></s> Live demo</span>
+          <span class="live"><span class="dot"></span> Live demo</span>
         </div>
         <div class="demo-body">
           <p class="q">A car starts <b>from rest</b> and accelerates uniformly at 2 m/s² for 5 seconds. How far does it travel?</p>
