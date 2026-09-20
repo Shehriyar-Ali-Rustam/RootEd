@@ -57,6 +57,20 @@ Type: **Literata** for display (a face designed for reading, not a fashion serif
 
 The page commits to a light theme by design.
 
+## Photography
+
+All imagery is Creative Commons, credited in the footer, and colour-graded to a 55–62%
+duotone against the brand greens so photos from different sources read as one system.
+
+| File | Source | Licence |
+| --- | --- | --- |
+| `band-exam`, `og-card` | Alison Wood, Wikimedia Commons | CC BY 3.0 |
+| `study-hands`, `physics-diagram`, `texture-dark` | CarbonNYC [in SF!], Flickr | CC BY 2.0 |
+
+**Do not remove the footer credit line** — attribution is a licence condition, not a courtesy.
+
+No identifiable minors appear in any image, per the safeguarding rules in the business plan.
+
 ## Copy rules
 
 These come from the business plan and are not stylistic preferences:
@@ -71,6 +85,6 @@ These come from the business plan and are not stylistic preferences:
 
 - [ ] The signup form validates and shows a success state, but does not persist anywhere yet
 - [ ] Tutor cards hold example data pending the first three vetted tutors
-- [ ] No `og:image` — needs a 1200×630 card for WhatsApp and social previews
+- [ ] `og:image` path is relative — make it an absolute https URL once the domain is live
 - [ ] Urdu translation not started; layout is ready for it
 - [ ] Launch board and subject still undecided (decisions D1/D2 in the business plan)

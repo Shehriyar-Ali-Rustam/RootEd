@@ -7,14 +7,21 @@
 <meta name="theme-color" content="#174d3a">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%23ffffff'/%3E%3Cpath d='M12 21V9' stroke='%23174d3a' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M12 13C12 13 9 12 7.5 9.5C6 7 6.5 4 6.5 4C6.5 4 9.5 4.5 11 7C12.5 9.5 12 13 12 13Z' fill='%23a7bfa9'/%3E%3Cpath d='M12 16C12 16 14.5 15.2 16 13.2C17.5 11.2 17.2 8.8 17.2 8.8C17.2 8.8 14.7 9.2 13.2 11.2C11.7 13.2 12 16 12 16Z' fill='%23174d3a'/%3E%3C/svg%3E">
 
-<!-- Link previews (WhatsApp, Facebook, X). Add og:image once a 1200x630 card exists. -->
+<!-- Link previews (WhatsApp, Facebook, X).
+     The card path is relative; switch it to the absolute https URL once the domain is live,
+     because some crawlers will not resolve a relative one. -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="RootEd - Matric learning, made personal">
 <meta property="og:description" content="Short lessons mapped to your board's syllabus, practice that shows you where you went wrong, and a vetted university-student tutor one tap away. Pilot cohort forming for Matric Grades 9-10.">
 <meta property="og:locale" content="en_PK">
+<meta property="og:image" content="assets/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="RootEd - Matric learning, made personal.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="RootEd - Matric learning, made personal">
 <meta name="twitter:description" content="Short lessons mapped to your board's syllabus, practice that shows you where you went wrong, and a vetted university-student tutor one tap away. Pilot cohort forming for Matric Grades 9-10.">
+<meta name="twitter:image" content="assets/og-card.jpg">
 
 <title>RootEd</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -615,8 +622,8 @@ img{ max-width:100%; height:auto; }
   <!-- ══════════ photographic band ══════════ -->
   <section class="band-img">
     <picture>
-      <source media="(max-width:760px)" srcset="assets/band-working-960.jpg">
-      <img src="assets/band-working.jpg" alt="A student's hands working through an algebra problem in a notebook." width="1920" height="731" loading="eager" decoding="async">
+      <source media="(max-width:760px)" srcset="assets/band-exam-960.jpg">
+      <img src="assets/band-exam.jpg" alt="A student in school uniform filling in an exam answer sheet with a pencil." width="1920" height="731" loading="eager" decoding="async">
     </picture>
     <span class="veil"></span>
     <div class="inner">
@@ -1044,7 +1051,7 @@ img{ max-width:100%; height:auto; }
       </div>
     </div>
     <div class="f-bot">
-      <p class="disc">Photography by <a href="https://www.flickr.com/photos/15923063@N00/" rel="noopener">CarbonNYC [in SF!]</a>, licensed <a href="https://creativecommons.org/licenses/by/2.0/" rel="noopener">CC BY 2.0</a>, colour-graded for RootEd.<br>Pre-launch working site. No enrolments, sessions or payments are being taken yet. Tutor profiles shown are examples, clearly marked. Pakistan · Matric Grades 9–10.</p>
+      <p class="disc">Photography: exam sheet by <a href="https://commons.wikimedia.org/w/index.php?curid=31443109" rel="noopener">Alison Wood</a> (<a href="https://creativecommons.org/licenses/by/3.0/" rel="noopener">CC BY 3.0</a>); notebook and diagram by <a href="https://www.flickr.com/photos/15923063@N00/" rel="noopener">CarbonNYC [in SF!]</a> (<a href="https://creativecommons.org/licenses/by/2.0/" rel="noopener">CC BY 2.0</a>). Colour-graded for RootEd.<br>Pre-launch working site. No enrolments, sessions or payments are being taken yet. Tutor profiles shown are examples, clearly marked. Pakistan · Matric Grades 9–10.</p>
       <p>© 2026 RootEd</p>
     </div>
   </div>
