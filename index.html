@@ -251,7 +251,15 @@ h1 span{ color:var(--root); display:block; }
 .step svg{ margin-top:18px; display:block; }
 
 /* ---------- forest anchor panel ---------- */
-.anchor{ background:var(--forest); color:#fff; }
+.anchor{ background:var(--forest); color:#fff; position:relative; overflow:hidden; }
+.anchor::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:url("assets/texture-dark.jpg") center/cover no-repeat;
+  opacity:.13; mix-blend-mode:luminosity;
+}
+.anchor > .wrap{ position:relative; z-index:1; }
+@media (min-width:900px){ .recruit.with-img{ grid-template-columns:.85fr 1.15fr; } }
+.recruit.with-img .acts{ justify-content:flex-start; margin-top:22px; }
 .anchor .eyebrow{ color:var(--sage); }
 .anchor .eyebrow::before{ background:rgba(167,191,169,.4); }
 .anchor h2{ font-size:clamp(29px,4.1vw,44px); letter-spacing:-.025em; }
@@ -409,6 +417,133 @@ footer a:hover{ color:#fff; text-decoration:underline; text-underline-offset:3px
 @keyframes rise{ from{ opacity:0; transform:translateY(18px); } to{ opacity:1; transform:none; } }
 @media (prefers-reduced-motion:reduce){ *{ animation-duration:.001ms !important; transition-duration:.001ms !important; } }
 
+/* ============================================================
+   Imagery, texture and motion
+   ============================================================ */
+
+/* squared-paper ground — the texture of every exam script */
+.graph{
+  background-image:
+    linear-gradient(to right, rgba(23,77,58,.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(23,77,58,.05) 1px, transparent 1px);
+  background-size:27px 27px;
+}
+
+/* ---------- full-bleed photographic band ---------- */
+.band-img{ position:relative; height:clamp(300px,44vw,470px); overflow:hidden; background:var(--forest); }
+.band-img picture,.band-img img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+.band-img .veil{
+  position:absolute; inset:0;
+  background:linear-gradient(95deg, rgba(14,49,37,.93) 4%, rgba(14,49,37,.62) 46%, rgba(14,49,37,.34) 100%);
+}
+.band-img .inner{ position:relative; height:100%; display:flex; align-items:center; }
+.band-img .quote{
+  font-family:var(--f-display); color:#fff; font-size:clamp(22px,3.6vw,40px);
+  line-height:1.22; letter-spacing:-.024em; max-width:17ch; text-wrap:balance;
+}
+.band-img .sub{ color:var(--sage); font-size:clamp(14px,1.7vw,16.5px); margin-top:15px; max-width:40ch; }
+@media (prefers-reduced-motion:no-preference){
+  .band-img img{ animation:ken 30s ease-in-out infinite alternate; will-change:transform; }
+}
+@keyframes ken{ from{ transform:scale(1.05); } to{ transform:scale(1.16) translate(-1.6%,-2%); } }
+
+/* ---------- chapter marquee ---------- */
+.rail{ border-block:1px solid var(--line); background:var(--paper); overflow:hidden; padding-block:13px; }
+.rail-track{ display:flex; gap:10px; width:max-content; }
+@media (prefers-reduced-motion:no-preference){ .rail-track{ animation:slide 64s linear infinite; } }
+.rail:hover .rail-track{ animation-play-state:paused; }
+@keyframes slide{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+.rail .ch{
+  font-family:var(--f-mono); font-size:11.5px; letter-spacing:.05em; white-space:nowrap;
+  padding:6px 13px; border:1px solid var(--line); border-radius:100px; color:var(--ink-2); background:var(--paper);
+}
+.rail .ch b{ color:var(--root); font-weight:500; }
+
+/* ---------- photographic figures ---------- */
+.shot{ position:relative; overflow:hidden; border-radius:var(--r-l); background:var(--mist-2); line-height:0; }
+.shot img{ width:100%; height:auto; display:block; }
+.shot figcaption{
+  position:absolute; left:0; right:0; bottom:0; padding:34px 20px 15px; line-height:1.45;
+  font-family:var(--f-mono); font-size:11px; letter-spacing:.07em; text-transform:uppercase; color:#fff;
+  background:linear-gradient(transparent,rgba(14,49,37,.88));
+}
+@media (prefers-reduced-motion:no-preference){
+  .js .shot{ clip-path:inset(0 0 100% 0); transition:clip-path 1.05s var(--ease); }
+  .js .shot.in{ clip-path:inset(0 0 0 0); }
+  .shot img{ transition:transform .9s var(--ease); }
+  .shot:hover img{ transform:scale(1.035); }
+}
+
+/* ---------- phone mockup: the handoff, looping ---------- */
+.device{ display:flex; justify-content:center; }
+.phone{
+  width:min(290px,80vw); border:9px solid #16231e; border-radius:38px; background:#16231e;
+  box-shadow:0 30px 60px -34px rgba(14,49,37,.65); overflow:hidden; flex:none;
+}
+.screen{ background:var(--paper); border-radius:29px; overflow:hidden; position:relative; }
+.sc-bar{ display:flex; align-items:center; gap:7px; padding:11px 14px; background:var(--mist); border-bottom:1px solid var(--line); }
+.sc-bar .bk{ font-family:var(--f-mono); font-size:9.5px; letter-spacing:.08em; color:var(--ink-3); }
+.sc-bar .pg{ margin-left:auto; font-family:var(--f-mono); font-size:9.5px; color:var(--root); }
+.sc-vid{ position:relative; aspect-ratio:16/10; background:linear-gradient(140deg,#1d5c46,#0e3125); display:grid; place-items:center; }
+.sc-vid .play{ width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.93); display:grid; place-items:center; }
+.sc-vid .play::after{ content:""; border-left:11px solid var(--forest); border-block:7px solid transparent; margin-left:3px; }
+.sc-vid .bar{ position:absolute; left:0; right:0; bottom:0; height:3px; background:rgba(255,255,255,.22); }
+.sc-vid .bar i{ display:block; height:100%; width:68%; background:var(--brass-lit); }
+.sc-body{ padding:14px; }
+.sc-body .lab{ font-family:var(--f-mono); font-size:9px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-3); }
+.sc-body .qq{ font-family:var(--f-display); font-size:13.5px; line-height:1.34; margin-top:7px; letter-spacing:-.008em; }
+.sc-opt{ margin-top:9px; display:grid; gap:5px; }
+.sc-opt span{ font-size:11px; padding:7px 10px; border:1px solid var(--line); border-radius:8px; color:var(--ink-2); }
+.sc-opt span.bad{ border-color:#e4c3b2; background:var(--flag-soft); color:var(--flag); }
+.sc-hand{
+  margin:11px -14px -14px; padding:12px 14px; background:var(--forest);
+  display:flex; align-items:center; gap:9px;
+}
+.sc-hand .a{ width:26px; height:26px; border-radius:50%; background:var(--sage); color:var(--forest); display:grid; place-items:center; font-size:10px; font-weight:700; flex:none; }
+.sc-hand .t{ min-width:0; }
+.sc-hand .t b{ display:block; color:#fff; font-size:10.5px; font-weight:600; }
+.sc-hand .t i{ display:block; color:var(--sage); font-size:9px; font-style:normal; margin-top:1px; }
+.sc-hand .go{ margin-left:auto; font-family:var(--f-mono); font-size:8.5px; letter-spacing:.06em; background:var(--sage-soft); color:var(--forest); padding:5px 8px; border-radius:100px; flex:none; }
+@media (prefers-reduced-motion:no-preference){
+  .sc-hand{ animation:slideup 7s var(--ease) infinite; }
+  .sc-opt span.bad{ animation:flag 7s var(--ease) infinite; }
+}
+@keyframes slideup{
+  0%,22%{ transform:translateY(105%); opacity:0; }
+  36%,88%{ transform:translateY(0); opacity:1; }
+  100%{ transform:translateY(105%); opacity:0; }
+}
+@keyframes flag{
+  0%,10%{ border-color:var(--line); background:var(--paper); color:var(--ink-2); }
+  20%,100%{ border-color:#e4c3b2; background:var(--flag-soft); color:var(--flag); }
+}
+
+/* ---------- animated subject diagrams ---------- */
+.diagrams{ display:grid; gap:14px; margin-top:26px; }
+@media (min-width:620px){ .diagrams{ grid-template-columns:repeat(3,1fr); } }
+.dia{ border:1px solid var(--line); border-radius:var(--r-m); padding:17px; background:var(--paper); }
+.dia svg{ display:block; width:100%; height:78px; }
+.dia .nm{ font-family:var(--f-mono); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3); margin-top:11px; }
+.dia .ch2{ font-size:14px; font-weight:600; margin-top:3px; }
+@media (prefers-reduced-motion:no-preference){
+  #swing{ animation:swing 3.4s ease-in-out infinite; transform-origin:60px 8px; }
+  .draw{ stroke-dasharray:240; stroke-dashoffset:240; animation:draw 3.6s var(--ease) infinite; }
+  #split{ animation:split 4s ease-in-out infinite; }
+}
+@keyframes swing{ 0%,100%{ transform:rotate(19deg); } 50%{ transform:rotate(-19deg); } }
+@keyframes draw{ 0%{ stroke-dashoffset:240; } 55%,100%{ stroke-dashoffset:0; } }
+@keyframes split{ 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(9px); } }
+
+/* ---------- media split ---------- */
+.media{ display:grid; gap:clamp(30px,4.4vw,56px); align-items:center; }
+@media (min-width:940px){ .media{ grid-template-columns:1fr 1fr; } }
+@media (min-width:940px){ .media.flip .m-txt{ order:2; } }
+
+/* ---------- credits ---------- */
+.credits{ font-size:12.2px; color:rgba(167,191,169,.6); margin-top:9px; line-height:1.5; }
+.credits a{ text-decoration:underline; text-underline-offset:2px; }
+
+
 /* ---------- standalone reset (the artifact host used to provide this) ---------- */
 img{ max-width:100%; height:auto; }
 [hidden]{ display:none !important; }
@@ -476,6 +611,27 @@ img{ max-width:100%; height:auto; }
     </div>
   </section>
 
+
+  <!-- ══════════ photographic band ══════════ -->
+  <section class="band-img">
+    <picture>
+      <source media="(max-width:760px)" srcset="assets/band-working-960.jpg">
+      <img src="assets/band-working.jpg" alt="A student's hands working through an algebra problem in a notebook." width="1920" height="731" loading="eager" decoding="async">
+    </picture>
+    <span class="veil"></span>
+    <div class="inner">
+      <div class="wrap">
+        <p class="quote">The gap isn't the video. It's the ten minutes after it.</p>
+        <p class="sub">That is the part RootEd is built for — the moment you close the lesson, try it yourself, and it doesn't work.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- real SSC chapter names, scrolling -->
+  <div class="rail" aria-hidden="true">
+    <div class="rail-track"><span class="ch"><b>PHY</b> &nbsp;Kinematics</span><span class="ch"><b>MATH</b> &nbsp;Quadratic Equations</span><span class="ch"><b>BIO</b> &nbsp;Cell Cycle</span><span class="ch"><b>PHY</b> &nbsp;Turning Effect of Forces</span><span class="ch"><b>CHEM</b> &nbsp;Chemical Equilibrium</span><span class="ch"><b>MATH</b> &nbsp;Matrices & Determinants</span><span class="ch"><b>PHY</b> &nbsp;Gravitation</span><span class="ch"><b>BIO</b> &nbsp;Gaseous Exchange</span><span class="ch"><b>CHEM</b> &nbsp;Acids, Bases & Salts</span><span class="ch"><b>MATH</b> &nbsp;Theory of Quadratic Equations</span><span class="ch"><b>PHY</b> &nbsp;Work & Energy</span><span class="ch"><b>BIO</b> &nbsp;Coordination & Control</span><span class="ch"><b>MATH</b> &nbsp;Basic Statistics</span><span class="ch"><b>PHY</b> &nbsp;Transfer of Heat</span><span class="ch"><b>CHEM</b> &nbsp;Organic Chemistry</span><span class="ch"><b>PHY</b> &nbsp;Kinematics</span><span class="ch"><b>MATH</b> &nbsp;Quadratic Equations</span><span class="ch"><b>BIO</b> &nbsp;Cell Cycle</span><span class="ch"><b>PHY</b> &nbsp;Turning Effect of Forces</span><span class="ch"><b>CHEM</b> &nbsp;Chemical Equilibrium</span><span class="ch"><b>MATH</b> &nbsp;Matrices & Determinants</span><span class="ch"><b>PHY</b> &nbsp;Gravitation</span><span class="ch"><b>BIO</b> &nbsp;Gaseous Exchange</span><span class="ch"><b>CHEM</b> &nbsp;Acids, Bases & Salts</span><span class="ch"><b>MATH</b> &nbsp;Theory of Quadratic Equations</span><span class="ch"><b>PHY</b> &nbsp;Work & Energy</span><span class="ch"><b>BIO</b> &nbsp;Coordination & Control</span><span class="ch"><b>MATH</b> &nbsp;Basic Statistics</span><span class="ch"><b>PHY</b> &nbsp;Transfer of Heat</span><span class="ch"><b>CHEM</b> &nbsp;Organic Chemistry</span></div>
+  </div>
+
   <!-- honest status — no invented numbers -->
   <section class="band">
     <dl class="wrap">
@@ -522,6 +678,73 @@ img{ max-width:100%; height:auto; }
     </div>
   </section>
 
+
+  <!-- ══════════ INSIDE A LESSON ══════════ -->
+  <section class="sec graph" id="inside" style="border-block:1px solid var(--line)">
+    <div class="wrap">
+      <div class="media">
+        <div class="m-txt rise">
+          <p class="eyebrow">Inside a lesson</p>
+          <h2 style="font-size:clamp(28px,3.9vw,42px);letter-spacing:-.025em">One screen. Lesson, check, and a way out.</h2>
+          <p class="lede" style="margin-top:16px">No jumping between a video site and a tutor directory. The moment a practice question goes wrong, the fix is offered on the same screen — a tutor who teaches that chapter, this week, with the price shown before anything is booked.</p>
+          <div class="diagrams">
+            <div class="dia">
+              <svg viewBox="0 0 120 78" fill="none" aria-hidden="true">
+                <line x1="20" y1="8" x2="100" y2="8" stroke="#cddbd0" stroke-width="2" stroke-linecap="round"/>
+                <g id="swing"><line x1="60" y1="8" x2="60" y2="56" stroke="#174d3a" stroke-width="1.8"/><circle cx="60" cy="61" r="8" fill="#174d3a"/></g>
+              </svg>
+              <p class="nm">Physics</p><p class="ch2">Simple harmonic motion</p>
+            </div>
+            <div class="dia">
+              <svg viewBox="0 0 120 78" fill="none" aria-hidden="true">
+                <line x1="12" y1="66" x2="112" y2="66" stroke="#cddbd0" stroke-width="1.6"/>
+                <line x1="60" y1="8" x2="60" y2="70" stroke="#cddbd0" stroke-width="1.6"/>
+                <path class="draw" d="M20 14 Q60 92 100 14" stroke="#174d3a" stroke-width="2.4" stroke-linecap="round"/>
+              </svg>
+              <p class="nm">Mathematics</p><p class="ch2">Quadratic curves</p>
+            </div>
+            <div class="dia">
+              <svg viewBox="0 0 120 78" fill="none" aria-hidden="true">
+                <circle cx="48" cy="39" r="19" stroke="#174d3a" stroke-width="2" fill="#f3f7f4"/>
+                <g id="split"><circle cx="72" cy="39" r="19" stroke="#a7bfa9" stroke-width="2" fill="none"/><circle cx="72" cy="39" r="5" fill="#a7bfa9"/></g>
+                <circle cx="48" cy="39" r="5" fill="#174d3a"/>
+              </svg>
+              <p class="nm">Biology</p><p class="ch2">Cell division</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="device rise">
+          <div class="phone">
+            <div class="screen">
+              <div class="sc-bar">
+                <span class="bk">SSC-II · PHYSICS</span>
+                <span class="pg">CH 2 · 68%</span>
+              </div>
+              <div class="sc-vid">
+                <span class="play"></span>
+                <span class="bar"><i></i></span>
+              </div>
+              <div class="sc-body">
+                <p class="lab">Check yourself · Q3 of 4</p>
+                <p class="qq">A body accelerates at 2 m/s² from rest. Distance after 5 s?</p>
+                <div class="sc-opt">
+                  <span>25 m</span>
+                  <span class="bad">50 m &nbsp;— not quite</span>
+                </div>
+                <div class="sc-hand">
+                  <span class="a">AK</span>
+                  <span class="t"><b>Ayesha teaches Kinematics</b><i>Free 20-min trial · Thu 7:00 pm</i></span>
+                  <span class="go">BOOK</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ══════════ FOREST ANCHOR: the differentiator ══════════ -->
   <section class="sec anchor">
     <div class="wrap anchor-grid">
@@ -555,6 +778,14 @@ img{ max-width:100%; height:auto; }
         <h2>Not anonymous. Not a five-star average of nothing.</h2>
         <p class="lede">Every tutor records a 60-second demo before they appear here, so you hear how someone explains before you pay them. We show what we have verified, and nothing we have not.</p>
       </div>
+
+      <figure class="shot" style="margin:0 0 30px">
+        <img src="assets/study-hands.jpg" srcset="assets/study-hands-512.jpg 512w, assets/study-hands.jpg 908w"
+             sizes="(max-width:900px) 100vw, 1100px"
+             alt="Close-up of a student working through algebra by hand in a notebook."
+             width="908" height="681" loading="lazy" decoding="async">
+        <figcaption>Vetting is about whether someone can explain this patiently — not whether they can solve it</figcaption>
+      </figure>
 
       <div class="tutors rise">
         <article class="tutor">
@@ -658,15 +889,21 @@ img{ max-width:100%; height:auto; }
   <!-- ══════════ TUTOR RECRUIT ══════════ -->
   <section class="sec" id="teach">
     <div class="wrap">
-      <div class="recruit rise">
+      <div class="recruit with-img rise">
+        <figure class="shot" style="margin:0">
+          <img src="assets/physics-diagram.jpg" srcset="assets/physics-diagram-512.jpg 512w, assets/physics-diagram.jpg 1024w"
+               sizes="(max-width:900px) 100vw, 420px"
+               alt="A hand sketching a pendulum diagram with the period equation written beside it."
+               width="1024" height="682" loading="lazy" decoding="async">
+        </figure>
         <div>
           <p class="eyebrow">For university students</p>
           <h2>Teach what you just finished learning.</h2>
           <p>You sat these papers recently enough to remember what was confusing. Record one 60-second demo, set your rate and your free hours, and we bring you students who need your exact chapter. We handle finding them, the guardian approval and the payment. You teach.</p>
-        </div>
-        <div class="acts">
-          <a href="#join" class="btn btn-p">Apply to teach</a>
-          <a href="#faq" class="btn btn-g">What's required</a>
+          <div class="acts">
+            <a href="#join" class="btn btn-p">Apply to teach</a>
+            <a href="#faq" class="btn btn-g">What's required</a>
+          </div>
         </div>
       </div>
     </div>
@@ -807,7 +1044,7 @@ img{ max-width:100%; height:auto; }
       </div>
     </div>
     <div class="f-bot">
-      <p class="disc">Pre-launch working site. No enrolments, sessions or payments are being taken yet. Tutor profiles shown are examples, clearly marked. Pakistan · Matric Grades 9–10.</p>
+      <p class="disc">Photography by <a href="https://www.flickr.com/photos/15923063@N00/" rel="noopener">CarbonNYC [in SF!]</a>, licensed <a href="https://creativecommons.org/licenses/by/2.0/" rel="noopener">CC BY 2.0</a>, colour-graded for RootEd.<br>Pre-launch working site. No enrolments, sessions or payments are being taken yet. Tutor profiles shown are examples, clearly marked. Pakistan · Matric Grades 9–10.</p>
       <p>© 2026 RootEd</p>
     </div>
   </div>
@@ -819,7 +1056,7 @@ img{ max-width:100%; height:auto; }
   document.documentElement.classList.add("js");
 
   /* ---- scroll reveal (fails open: .rise is visible without JS) ---- */
-  var risers = document.querySelectorAll(".rise");
+  var risers = document.querySelectorAll(".rise, .shot");
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(e){
